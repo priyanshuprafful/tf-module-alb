@@ -9,9 +9,10 @@ resource "aws_lb" "test" {
   enable_deletion_protection = var.enable_delete_protection
 
 
-  }
+  
   tags = merge(
     var.tags ,
     { Name = "${var.name}-${var.env}"}
+    )
 
 }
