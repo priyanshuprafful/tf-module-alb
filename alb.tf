@@ -1,12 +1,13 @@
 # for creation of load balancers
 
-resource "aws_lb" "test" {
+resource "aws_lb" "main" {
   name = "${var.name}-${var.env}"
   internal = var.internal
   load_balancer_type = var.load_balancer_type
  # security_groups = []
   subnets = var.subnets
   enable_deletion_protection = var.enable_delete_protection
+  security_groups = [aws_security_group.main.id]
 
 
 
@@ -14,5 +15,34 @@ resource "aws_lb" "test" {
     var.tags ,
     { Name = "${var.name}-${var.env}"}
     )
+
+}
+
+resource "aws_security_group" "main" {
+  name = "${var.name}-${var.env}-LB"
+  description = "${var.name}-${var.env}-LB description"
+  vpc_id = var.vpc_id
+
+
+  ingress {
+    description = "APP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = var.allow_cidr
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = merge(
+    var.tags ,
+    { Name = "${var.name}-${var.env}-LB"}
+  )
 
 }
