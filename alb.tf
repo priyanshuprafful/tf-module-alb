@@ -27,7 +27,7 @@ resource "aws_lb_listener" "main_default_fixed_response" {
     type = "fixed-response"
 
     fixed_response {
-      content_type = "text/plain"
+      content_type = "text/html"
       message_body = "<h1> 503 - Invalid Request </h1>"
       status_code = "503"
     }
